@@ -1,0 +1,11 @@
+:root{font-family:system-ui,Segoe UI,Roboto,Arial;--accent:#1a73e8}
+*{box-sizing:border-box}
+body{margin:0;background:#f6f7fb;color:#111}
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.brand a{text-decoration:none;color:var(--accent);font-weight:700}
+.container{max-width:960px;margin:28px auto;padding:0 16px}
+.hero{background:#fff;padding:32px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.04);text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+.card{background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card h3{margin:8px 0 4px}
+.btn{display:inline-block;padding:10px 16px;border-radius:8px;text-decoration:none;background:var(--accent);color:#fff}
