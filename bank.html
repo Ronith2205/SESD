@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Factory Method — Demo (Tuesday Batch)</title>
+  <style>
+    :root{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+    body{background:linear-gradient(135deg,#f6fdff 0%, #eef6ff 100%);min-height:100vh;margin:0;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{width:920px;background:white;border-radius:14px;box-shadow:0 10px 30px rgba(15,30,60,0.08);padding:22px}
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 18px;color:#475569}
+    .controls{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    select,input[type=button]{padding:10px 12px;border-radius:8px;border:1px solid #e6eef8;background:#fff}
+    input[type=button]{cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    .log{background:#fbfdff;border:1px dashed #e6eef8;padding:12px;border-radius:10px;min-height:360px;overflow:auto}
+    .info{background:linear-gradient(180deg,#fff 0%,#fbfcff 100%);padding:12px;border-radius:10px;border:1px solid #f0f6fb;min-height:360px}
+    .entry{padding:10px;border-radius:8px;margin-bottom:8px;border-left:4px solid #60a5fa;background:white}
+    .small{font-size:13px;color:#334155}
+    .muted{color:#64748b;font-size:13px}
+    .examples{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .btn-primary{background:#2563eb;color:white;border:none}
+    footer{margin-top:14px;font-size:13px;color:#64748b}
+    pre{white-space:pre-wrap;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Factory Method — Interactive Demo</h1>
+    <p class="lead">Choose a domain and a type to create objects without directly calling <code>new</code> across your app. This centralizes creation logic and keeps code extensible.</p>
+
+    <div class="controls">
+      <label class="small">Domain</label>
+      <select id="domainSelect">
+        <option value="food">Food Delivery App</option>
+        <option value="bank">Banking App</option>
+        <option value="ecom">E-commerce App</option>
+        <option value="ride">Ride-Hailing App</option>
+      </select>
+
+      <label class="small">Type</label>
+      <select id="typeSelect"></select>
+
+      <input type="button" id="createBtn" value="Create" class="btn-primary" />
+      <input type="button" id="clearBtn" value="Clear Log" />
+    </div>
+
+    <div class="grid">
+      <div class="log" id="log">
+        <div class="muted">Created objects will appear here...</div>
+      </div>
+
+      <div class="info">
+        <div class="small"><strong>Why Factory Method?</strong></div>
+        <ul class="small">
+          <li>Centralizes creation logic in one place (Factory).</li>
+          <li>Client code asks factory for an object — no scattered <code>new</code> statements.</li>
+          <li>Easy to extend: add new product/user types without changing clients.</li>
+        </ul>
+
+        <div class="small"><strong>Pattern (JS example)</strong></div>
+        <pre>class Factory {
+  create(type, options) {
+    // choose and return one of many concrete classes
+  }
+}</pre>
+
+        <div class="small"><strong>Examples implemented:</strong></div>
+        <div class="examples small">
+          <div>• Food: Customer, DeliveryPartner, Restaurant</div>
+          <div>• Bank: SavingsAccount, CurrentAccount, LoanAccount</div>
+          <div>• E-com: Electronics, Clothing, Book</div>
+          <div>• Ride: Mini, Sedan, SUV, Auto</div>
+        </div>
+
+        <footer>Tip: Open browser console to inspect created objects in detail.</footer>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------------
+    // Domain model: Concrete classes
+    // -------------------------
+    // Food Delivery
+    class Customer { constructor(name='Guest'){this.role='Customer';this.name=name;this.id=Customer.nextId++} describe(){return `${this.role}(${this.name}, id=${this.id})`}} Customer.nextId=1;
+    class DeliveryPartner { constructor(name='DP'){this.role='DeliveryPartner';this.name=name;this.vehicle='Bike';this.id=DeliveryPartner.nextId++} describe(){return `${this.role}(${this.name}, ${this.vehicle}, id=${this.id})`}} DeliveryPartner.nextId=1;
+    class Restaurant { constructor(name='Resto'){this.role='Restaurant';this.name=name;this.cuisine='Multi';this.id=Restaurant.nextId++} describe(){return `${this.role}(${this.name}, ${this.cuisine}, id=${this.id})`}} Restaurant.nextId=1;
+
+    // Banking
+    class SavingsAccount { constructor(holder='Holder'){this.type='Savings';this.holder=holder;this.interest=4.0} describe(){return `${this.type}Account(${this.holder}, interest=${this.interest}%)`}} 
+    class CurrentAccount { constructor(holder='Holder'){this.type='Current';this.holder=holder;this.odLimit=50000} describe(){return `${this.type}Account(${this.holder}, OD=${this.odLimit})`}} 
+    class LoanAccount { constructor(holder='Holder'){this.type='Loan';this.holder=holder;this.amount=0} describe(){return `${this.type}Account(${this.holder}, amount=${this.amount})`}} 
+
+    // E-commerce products
+    class Electronics { constructor(name='Gadget'){this.category='Electronics';this.name=name;this.warranty='1 year'} describe(){return `${this.category}(${this.name}, ${this.warranty})`}} 
+    class Clothing { constructor(name='Shirt'){this.category='Clothing';this.name=name;this.size='M'} describe(){return `${this.category}(${this.name}, size=${this.size})`}} 
+    class Book { constructor(title='Untitled'){this.category='Book';this.title=title;this.pages=200} describe(){return `${this.category}(${this.title}, ${this.pages} pages)`}} 
+
+    // Ride types
+    class Mini { constructor(){this.type='Mini';this.farePerKm=6} describe(){return `${this.type} (₹${this.farePerKm}/km)`}} 
+    class Sedan { constructor(){this.type='Sedan';this.farePerKm=10} describe(){return `${this.type} (₹${this.farePerKm}/km)`}} 
+    class SUV { constructor(){this.type='SUV';this.farePerKm=16} describe(){return `${this.type} (₹${this.farePerKm}/km)`}} 
+    class Auto { constructor(){this.type='Auto';this.farePerKm=5} describe(){return `${this.type} (₹${this.farePerKm}/km)`}} 
+
+    // -------------------------
+    // Factory: central creation logic
+    // -------------------------
+    class AppFactory {
+      // domain: 'food' | 'bank' | 'ecom' | 'ride'
+      static create(domain, subtype, opts){
+        switch(domain){
+          case 'food': return AppFactory._createFood(subtype, opts);
+          case 'bank': return AppFactory._createBank(subtype, opts);
+          case 'ecom': return AppFactory._createEcom(subtype, opts);
+          case 'ride': return AppFactory._createRide(subtype, opts);
+          default: throw new Error('Unknown domain')
+        }
+      }
+
+      static _createFood(type, opts={}){
+        switch(type){
+          case 'Customer': return new Customer(opts.name);
+          case 'DeliveryPartner': return new DeliveryP
